@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+    <title>Gradient Glow</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #029ac3; /* Initial blue background */
+            animation: gradient 0.5s ease infinite; 
+        }
+
+        #buttonContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controlButton {
+            margin: 10px;
+            padding: 20px 40px;
+            font-size: 24px;
+            color: white;
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #icon {
+            position: absolute;
+            top: calc(38% - 120px); /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            display: none; /* Initially hide the status icon */
+            width: 80px; /* Adjust as needed */
+            height: 80px; /* Adjust as needed */
+        }
+
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+    </style>
+</head>
+<body>
+    <div id="buttonContainer">
+        <button id="startButton" class="controlButton">Start</button>
+        <button id="stopButton" class="controlButton">Stop</button>
+        <button id="downloadButton" class="controlButton">Download</button> <!-- New Download button -->
+    </div>
+    <img id="icon" src="" alt="Status Icon" />
+
+    <script src="https://blobs.app/js/blobs.min.js"></script>
+    <script>
+        let intervalId;
+        let randomColor1 = '';
+        let randomColor2 = '';
+
+        function generateRandomNumber() {
+            let min = Math.ceil(1e11);  // Minimum value is 100000000000
+            let max = Math.floor(1e12); // Maximum value is 999999999999
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            if(intervalId) {
+                clearInterval(intervalId);
+            }
+            intervalId = setInterval(function() {
+                randomColor1 = '#' + generateRandomNumber().toString(16).substring(0, 6);
+                randomColor2 = '#' + generateRandomNumber().toString(16).substring(0, 6);
+                document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+                document.body.style.animationDuration = '0.1s';
+
+                let blob = new Blob();
+                let path = blob.generate();
+                document.body.style.backgroundImage = 'url("' + path + '")';
+            }, 100);
+
+            document.getElementById('icon').src = 'lock.png';
+            document.getElementById('icon').style.display = 'block';
+        });
+
+        document.getElementById('stopButton').addEventListener('click', function() {
+            if(intervalId) {
+                clearInterval(intervalId);
+            }
+            document.getElementById('icon').src = 'unlocked.png';
+            document.getElementById('icon').style.display = 'block';
+        });
+
+function downloadBackground() {
+    let canvas = document.createElement('canvas');
+    canvas.width = 1920;
+    canvas.height = 1080;
+    let context = canvas.getContext('2d');
+
+    let gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, randomColor1);
+    gradient.addColorStop(1, randomColor2);
+
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    let link = document.createElement('a');
+    link.download = 'background.png';
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+
+        document.getElementById('downloadButton').addEventListener('click', downloadBackground);
+
+    </script>
+</body>
+</html>
