@@ -30,6 +30,7 @@
             border: 2px solid white;
             border-radius: 20px;
             cursor: pointer;
+            outline: none;
         }
 
         #icon {
@@ -75,6 +76,7 @@
         box-shadow: 0px 5px 15px rgba(0,0,0,0.2); /* Larger, softer shadow */
         transition: all 0.3s ease; /* Smooth transition for hover effects */
         margin-top: 10px;
+            outline: none; 
     }
 
     .copyButton:hover {
@@ -90,6 +92,7 @@
         width: 20px;  /* Adjust as needed */
         height: 20px; /* Adjust as needed */
         vertical-align: middle; /* Aligns the icon vertically in the middle */
+        margin-top: 4px; /* Add this line to move the icon down */
     }
 
     #tickMark1, #tickMark2 {
@@ -108,19 +111,20 @@
     <img id="icon" src="" alt="Status Icon" />
 
     <div id="colorSelectionScreen">
-        <div class="colorContainer">
-            <img src="left_icon.png" alt="Left" class="icon">
-            <input id="color1Input" class="colorInput" type="color">
-            <button id="copyColor1Button" class="copyButton"><span id="color1Code"></span></button>
-            <span id="tickMark1"></span>
-        </div>
-        <div class="colorContainer">
-            <img src="right_icon.png" alt="Right" class="icon">
-            <input id="color2Input" class="colorInput" type="color">
-            <button id="copyColor2Button" class="copyButton"><span id="color2Code"></span></button>
-            <span id="tickMark2"></span>
-        </div>
-    </div>
+<div class="colorContainer">
+    <img src="left_icon.png" alt="Left" class="icon">
+    <input id="color1Input" class="colorInput" type="color">
+    <input id="hexColor1Input" class="colorInput" type="text" placeholder="#FFFFFF">
+    <button id="copyColor1Button" class="copyButton"><span id="color1Code"></span></button>
+    <span id="tickMark1"></span>
+</div>
+<div class="colorContainer">
+    <img src="right_icon.png" alt="Right" class="icon">
+    <input id="color2Input" class="colorInput" type="color">
+    <input id="hexColor2Input" class="colorInput" type="text" placeholder="#FFFFFF">
+    <button id="copyColor2Button" class="copyButton"><span id="color2Code"></span></button>
+    <span id="tickMark2"></span>
+</div>
     <script>
         let intervalId;
         let randomColor1 = '#ffffff';  // Set initial color
@@ -228,6 +232,17 @@ document.getElementById('color2Input').addEventListener('input', function() {
     document.getElementById('color2Input').addEventListener('input', function() {
         document.getElementById('color2Code').textContent = this.value.toUpperCase();
     });
+
+document.getElementById('hexColor1Input').addEventListener('input', function() {
+    randomColor1 = this.value;
+    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+});
+
+document.getElementById('hexColor2Input').addEventListener('input', function() {
+    randomColor2 = this.value;
+    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+});
     </script>
+
 </body>
 </html>
