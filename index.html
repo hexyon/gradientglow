@@ -34,7 +34,7 @@
 
         #icon {
             position: absolute;
-            top: calc(38% - 120px); /* Adjust as needed */
+            top: calc(50% - 275px); /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             display: none; /* Initially hide the status icon */
@@ -47,20 +47,84 @@
             50% {background-position: 100% 50%;}
             100% {background-position: 0% 50%;}
         }
+
+#colorSelectionScreen {
+    position: absolute;
+    left: 56%;
+    width: 250px; /* Adjust as needed */
+    height: 300px; /* Adjust as needed */
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    border-radius: 20px;
+    padding: 20px;
+    display: none; /* Initially hide the color selection screen */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Optional: add a light border for a "glass" effect */
+}
+
+    .colorInput, .copyButton {
+        border: none;
+        border-radius: 50px; /* Keep the buttons round */
+        padding: 10px 20px; /* Larger buttons, like earlier version */
+        font-size: 18px; /* Larger text, like earlier version */
+        background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+        color: #E0E0E0;
+        cursor: pointer;
+        box-shadow: 0px 5px 15px rgba(0,0,0,0.2); /* Larger, softer shadow */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+        margin-top: 10px;
+    }
+
+    .copyButton:hover {
+        background: rgba(255, 255, 255, 0.2); /* Add a slight white background on hover */
+    }
+
+
+    .copyButton:active {
+        background: rgba(255, 255, 255, 0.3); /* Change background color when button is clicked */
+    }
+
+    .icon {
+        width: 20px;  /* Adjust as needed */
+        height: 20px; /* Adjust as needed */
+        vertical-align: middle; /* Aligns the icon vertically in the middle */
+    }
+
+    #tickMark1, #tickMark2 {
+        color: white; /* Change the color to white */
+    }
     </style>
 </head>
 <body>
     <div id="buttonContainer">
         <button id="startButton" class="controlButton">Start</button>
         <button id="stopButton" class="controlButton">Stop</button>
+        <button id="colorsButton" class="controlButton">Colors</button> 
         <button id="downloadButton" class="controlButton">Download</button> 
     </div>
+
     <img id="icon" src="" alt="Status Icon" />
 
+    <div id="colorSelectionScreen">
+        <div class="colorContainer">
+            <img src="left_icon.png" alt="Left" class="icon">
+            <input id="color1Input" class="colorInput" type="color">
+            <button id="copyColor1Button" class="copyButton"><span id="color1Code"></span></button>
+            <span id="tickMark1"></span>
+        </div>
+        <div class="colorContainer">
+            <img src="right_icon.png" alt="Right" class="icon">
+            <input id="color2Input" class="colorInput" type="color">
+            <button id="copyColor2Button" class="copyButton"><span id="color2Code"></span></button>
+            <span id="tickMark2"></span>
+        </div>
+    </div>
     <script>
         let intervalId;
-        let randomColor1 = '';
-        let randomColor2 = '';
+        let randomColor1 = '#ffffff';  // Set initial color
+        let randomColor2 = '#ffffff';  // Set initial color
 
         function generateRandomNumber() {
             let min = Math.ceil(1e11);  // Minimum value is 100000000000
@@ -77,6 +141,10 @@
                 randomColor2 = '#' + generateRandomNumber().toString(16).substring(0, 6);
                 document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
                 document.body.style.animationDuration = '0.1s';
+
+         // Update color code display
+        document.getElementById('color1Code').textContent = randomColor1.toUpperCase();
+        document.getElementById('color2Code').textContent = randomColor2.toUpperCase();
 
                 let blob = new Blob();
                 let path = blob.generate();
@@ -117,6 +185,49 @@ function downloadBackground() {
 
         document.getElementById('downloadButton').addEventListener('click', downloadBackground);
 
+
+/* Script for the new color selection screen */
+document.getElementById('colorsButton').addEventListener('click', function() {
+    let colorSelectionScreen = document.getElementById('colorSelectionScreen');
+    colorSelectionScreen.style.display = 'flex';
+});
+
+document.getElementById('color1Input').addEventListener('input', function() {
+    randomColor1 = this.value;
+    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+});
+
+document.getElementById('color2Input').addEventListener('input', function() {
+    randomColor2 = this.value;
+    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+});
+
+
+        document.getElementById('copyColor1Button').addEventListener('click', function() {
+            navigator.clipboard.writeText(randomColor1);
+            var tickMarkElement = document.getElementById('tickMark1');
+            tickMarkElement.textContent = '✓';
+            setTimeout(function() {
+                tickMarkElement.textContent = '';
+            }, 3000);
+        });
+
+        document.getElementById('copyColor2Button').addEventListener('click', function() {
+            navigator.clipboard.writeText(randomColor2);
+            var tickMarkElement = document.getElementById('tickMark2');
+            tickMarkElement.textContent = '✓';
+            setTimeout(function() {
+                tickMarkElement.textContent = '';
+            }, 3000);
+        });
+
+    document.getElementById('color1Input').addEventListener('input', function() {
+        document.getElementById('color1Code').textContent = this.value.toUpperCase();
+    });
+
+    document.getElementById('color2Input').addEventListener('input', function() {
+        document.getElementById('color2Code').textContent = this.value.toUpperCase();
+    });
     </script>
 </body>
 </html>
