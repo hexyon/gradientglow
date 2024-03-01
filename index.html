@@ -233,15 +233,19 @@ document.getElementById('color2Input').addEventListener('input', function() {
         document.getElementById('color2Code').textContent = this.value.toUpperCase();
     });
 
-document.getElementById('hexColor1Input').addEventListener('input', function() {
-    randomColor1 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-});
+    document.getElementById('hexColor1Input').addEventListener('input', function() {
+        randomColor1 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('color1Code').textContent = this.value.toUpperCase(); // Update color code display
+    });
 
-document.getElementById('hexColor2Input').addEventListener('input', function() {
-    randomColor2 = this.value;
-    document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
-});
+    document.getElementById('hexColor2Input').addEventListener('input', function() {
+        randomColor2 = this.value;
+        document.body.style.background = 'linear-gradient(90deg, ' + randomColor1 + ', ' + randomColor2 + ')';
+        document.getElementById('color2Code').textContent = this.value.toUpperCase(); // Update color code display
+    });
+
+
     </script>
 
 </body>
